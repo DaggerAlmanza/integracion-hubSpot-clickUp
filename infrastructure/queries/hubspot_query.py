@@ -1,32 +1,32 @@
-import requests
-from infrastructure.database.constants import (
-    ACCESS_TOKEN_HUBSPOT,
-    URL_HUBSPOT
+from infrastructure.config.client_hubspot import (
+    client
 )
-
-headers = {
-    'authorization': f"Bearer {ACCESS_TOKEN_HUBSPOT}"
-    }
+from hubspot.crm.contacts import (
+    SimplePublicObjectInputForCreate,
+    ApiException
+)
 
 
 class HubSpotQuery:
 
-    def get_hubspots():
-        response = requests.request(
-            "GET",
-            URL_HUBSPOT,
-            headers=headers
-        )
-        print(response)
-        all_values = dict(response.json())
-        return all_values
-
-    def create_hubspot():
-            response = requests.request(
-                "POST",
-                URL_HUBSPOT,
-                headers=headers
+    def get_hubspots() -> list:
+        try:
+            response = client.crm.contacts.basic_api.get_page(
+                limit=10,
+                archived=False
             )
-            print(response)
-            all_values = dict(response.json())
-            return all_values
+            return response
+        except ApiException as e:
+            return f"Exception when calling basic_api->get_page: %s\n  % {e}"
+
+    def create_hubspot(properties: dict):
+        try:
+            simple_public_object_input_for_create = SimplePublicObjectInputForCreate(
+                properties=properties, associations=[]
+            )
+            response = client.crm.contacts.basic_api.create(
+                simple_public_object_input_for_create=simple_public_object_input_for_create
+            )
+            return response
+        except ApiException as e:
+            return f"Exception when calling basic_api->create: %s\n  % {e}"

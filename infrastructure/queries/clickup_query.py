@@ -1,34 +1,23 @@
 import requests
-import os
 from infrastructure.database.constants import (
-    ACCESS_TOKEN_HUBSPOT,
-    URL_HUBSPOT
+    URL_CLICKUP,
+    CLIENT_SECRET
 )
 
-headers = {
-    'authorization': f"Bearer {ACCESS_TOKEN_HUBSPOT}"
-    }
+headers = {"Authorization": CLIENT_SECRET}
+task_id = "122"
 
 
 class ClickUpQuery:
 
-    def get_hubspots():
-        response = requests.request(
-            "GET",
-            URL_HUBSPOT,
-            headers=headers
-        )
-        print(response
-    )
-        all_values = dict(response.json())
-        return all_values
+    def get_clickups() -> dict:
+        pass
 
-    def create_hubspot():
-            response = requests.request(
-                "POST",
-                URL_HUBSPOT,
-                headers=headers
-            )
-            print(response)
-            all_values = dict(response.json())
-            return all_values
+    def create_clickup(propieta: dict):
+        try:
+            url = f"{URL_CLICKUP}/task/{task_id}"
+            headers = {"Authorization": CLIENT_SECRET}
+            response = requests.post(url, headers=headers)
+            return response
+        except Exception as error:
+            return f"Error: {error}"

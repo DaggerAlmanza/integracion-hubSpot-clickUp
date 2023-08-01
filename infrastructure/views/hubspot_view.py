@@ -7,42 +7,58 @@ from infrastructure.views.serializers.hubspot_serializer import (
     HubspotSerializer
 )
 from infrastructure.process.hubspot_process import (
-    get_process,
-    save_process,
+    HubSpotProcess
+)
+from infrastructure.database.constants import (
+    INTERNAL_SERVER_ERROR,
+    OK,
 )
 
+
 router = APIRouter()
+hubspot_client = HubSpotProcess()
 
 
 @router.post(
-    "/hubspot",
-    tags=["hubspot"],
+    "/contact",
+    tags=["contact"],
     response_model=ResponseSerializer
 )
 async def create_hubspot(
     request: HubspotSerializer
 ):
-    response = save_process(
-        request.dict()
-    )
-    return JSONResponse(
-        # status_code=200,
-        # content={
-        #     "data": "response"
-        # }
-        status_code=response.pop("status_code"),
-        content=response
-    )
+    try:
+        response = hubspot_client.create_contact(
+            request.model_dump()
+        )
+        return JSONResponse(
+            status_code=OK,
+            content=response.properties
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=INTERNAL_SERVER_ERROR,
+            content={
+                "message": "there was an error"
+            }
+        )
 
 
 @router.get(
-    "/hubspot",
-    tags=["hubspot"],
+    "/contact",
+    tags=["contact"],
     response_model=ResponseSerializer
 )
 async def get_hubspot():
-    response = get_process()
-    return JSONResponse(
-        status_code=response.pop("status_code"),
-        content=response
-    )
+        try:
+            response = hubspot_client.get_contacts()
+            return JSONResponse(
+                content=[data.properties for data in response.results]
+            )
+        except Exception as e:
+            return JSONResponse(
+                status_code=INTERNAL_SERVER_ERROR,
+                content={
+                    "message": "there was an error"
+                }
+            )

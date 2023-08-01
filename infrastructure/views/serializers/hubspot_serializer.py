@@ -1,11 +1,12 @@
-from pydantic import BaseModel, Field
+from pydantic import (
+    BaseModel,
+    Field,
+    EmailStr
+)
 
 
 class HubspotSerializer(BaseModel):
-    company: str = Field(
-        ...
-    )
-    email: str = Field(
+    email: EmailStr = Field(
         ...
     )
     firstname: str = Field(
@@ -14,7 +15,7 @@ class HubspotSerializer(BaseModel):
     lastname: str = Field(
         ...
     )
-    phone: int = Field(
+    phone: str = Field(
         ...,
         example=3003003000
     )

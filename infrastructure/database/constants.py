@@ -13,5 +13,11 @@ ACCESS_TOKEN_HUBSPOT = os.getenv("ACCESS_TOKEN_HUBSPOT")
 
 URL_HUBSPOT="https://api.hubspot.com/crm/v3/objects/contacts"
 
+
+LIST_ID_CLICKUP = os.getenv("LIST_ID_CLICKUP")
+CLIENT_SECRET = os.getenv("TOKEN_CLICKUP")
+
+URL_CLICKUP=f"https://api.clickup.com/api/v2/"
+
 OK = 200
 INTERNAL_SERVER_ERROR = 500

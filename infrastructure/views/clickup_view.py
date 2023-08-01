@@ -1,50 +1,76 @@
-from fastapi import APIRouter
-from starlette.responses import JSONResponse
+from fastapi import APIRouter, BackgroundTasks
+from infrastructure.database.constants import (
+    INTERNAL_SERVER_ERROR,
+    OK,
+)
+from infrastructure.process.clickup_process import (
+    ClickUpProcess
+)
 from infrastructure.views.serializers.response_serializer import ResponseSerializer
-# from infrastructure.views.serializers.clickup_serializer import clickupSerializer
+from starlette.responses import JSONResponse
 
 
 router = APIRouter()
+clickup_client = ClickUpProcess()
 
 
-# @router.post(
-#     "/clickup",
-#     tags=["clickup"],
-#     response_model=ResponseSerializer
-# )
-# async def create_clickup(
-#     request: clickupSerializer
-# ):
-#     print(request)
-#     # response = clickup_process.save_form(
-#     #     request.dict(),
-#     #     current_user
-#     # )
-#     return JSONResponse(
-#         status_code=200,
-#         content={
-#             "data": "response"
-#         }
-#         # status_code=response.pop("status_code"),
-#         # content=response
-#     )
-
-
-@router.get(
-    "/clickup",
+@router.post(
+    "/list",
     tags=["clickup"],
     response_model=ResponseSerializer
 )
-async def get_clickup():
-    # response = clickup_process.get_form(
-    #     uuid,
-    #     current_user
-    # )
+async def create_clickup_task():
+    response = clickup_client.create_task()
+
     return JSONResponse(
-        status_code=200,
-        content={
-            "data": "response"
-        }
-        # status_code=response.pop("status_code"),
-        # content=response
+        status_code=OK,
+        content=response
     )
+
+
+@router.get(
+    "/list",
+    tags=["clickup"],
+    response_model=ResponseSerializer
+)
+async def get_clickup_list():
+    try:
+        response = clickup_client.get()
+        return JSONResponse(
+            status_code=OK,
+            content=response
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=INTERNAL_SERVER_ERROR,
+            content={
+                "message": "there was an error"
+            }
+        )
+
+
+@router.post(
+    "/task/",
+    tags=["clickup"],
+    response_model=ResponseSerializer
+)
+async def click_up_run_task(background_tasks: BackgroundTasks):
+    try:
+        background_tasks.add_task(run_background_task)
+        return JSONResponse(
+            status_code=OK,
+            content={
+                "message": "Tu tarea se está ejecutando y puede tomar tiempo"
+            }
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=INTERNAL_SERVER_ERROR,
+            content={
+                "message": "there was an error"
+            }
+        )
+
+
+def run_background_task():
+    clickup_client.create_task()

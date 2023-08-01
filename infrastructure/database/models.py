@@ -1,8 +1,8 @@
 from sqlalchemy import (
-    # JSON,
+    JSON,
     # Boolean,
     Column,
-    # DateTime,
+    DateTime,
     # Float,
     Integer,
     String
@@ -17,15 +17,23 @@ from .constants import (
 Base = declarative_base()
 
 
-class ApiModel(Base):
+class ApiCallsModel(Base):
     __tablename__ = "api_calls"
 
     id = Column(Integer, primary_key=True)
-    email = Column(String)
-    firsname = Column(String)
-    lastname = Column(String)
-    phone = Column(Integer)
-    website = Column(String)
+    created_at = Column(DateTime)
+    endpoint = Column(String)
+    params = Column(JSON)
+    result = Column(String)
+
+    def to_json(self, *args, **kwargs):
+        return {
+            "id": self.id,
+            "created_at": str(self.created_at),
+            "endpoint": self.endpoint,
+            "params": self.params,
+            "result": self.result,
+        }
 
 
 engine = create_engine(

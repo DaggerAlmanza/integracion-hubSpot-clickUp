@@ -1,6 +1,6 @@
 from infrastructure.views import (
-    hubspot_view,
-    clickup_view
+    clickup_view,
+    hubspot_view
 )
 from fastapi import APIRouter
 
