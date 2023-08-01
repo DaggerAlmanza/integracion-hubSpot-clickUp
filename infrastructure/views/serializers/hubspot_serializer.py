@@ -17,7 +17,7 @@ class HubspotSerializer(BaseModel):
     )
     phone: str = Field(
         ...,
-        example=3003003000
+        example="3003003000"
     )
     website: str = Field(
         ...,

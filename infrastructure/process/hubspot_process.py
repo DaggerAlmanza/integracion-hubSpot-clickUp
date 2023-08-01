@@ -1,15 +1,15 @@
 import hubspot
 
-from infrastructure.database.constants import (
-    ACCESS_TOKEN_HUBSPOT,
-)
 from hubspot.crm.contacts import (
     ApiException,
     SimplePublicObjectInputForCreate,
     SimplePublicObjectInput,
 )
-from infrastructure.queries.database_query import ApiCallsQuery
 from infrastructure.config.helpers import GeneralHelpers
+from infrastructure.database.constants import (
+    ACCESS_TOKEN_HUBSPOT,
+)
+from infrastructure.queries.database_query import ApiCallsQuery
 
 repository = ApiCallsQuery()
 

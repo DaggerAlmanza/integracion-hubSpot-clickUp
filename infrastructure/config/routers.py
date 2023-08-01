@@ -1,8 +1,8 @@
+from fastapi import APIRouter
 from infrastructure.views import (
     clickup_view,
-    hubspot_view
+    hubspot_view,
 )
-from fastapi import APIRouter
 
 
 urls = APIRouter()

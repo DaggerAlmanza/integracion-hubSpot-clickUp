@@ -1,17 +1,15 @@
-from sqlalchemy import (
-    JSON,
-    # Boolean,
-    Column,
-    DateTime,
-    # Float,
-    Integer,
-    String
-)
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
 from .constants import (
     SQL_PATH
 )
+from sqlalchemy import (
+    Column,
+    DateTime,
+    Integer,
+    JSON,
+    String,
+)
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
 
 
 Base = declarative_base()

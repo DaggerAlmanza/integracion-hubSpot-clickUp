@@ -1,5 +1,6 @@
 import requests
 
+from infrastructure.config.helpers import GeneralHelpers
 from infrastructure.database.constants import (
     CLIENT_SECRET,
     LIST_ID_CLICKUP,
@@ -7,7 +8,6 @@ from infrastructure.database.constants import (
 )
 from infrastructure.process.hubspot_process import HubSpotProcess
 from infrastructure.queries.database_query import ApiCallsQuery
-from infrastructure.config.helpers import GeneralHelpers
 
 
 repository = ApiCallsQuery()

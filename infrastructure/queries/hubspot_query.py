@@ -1,9 +1,9 @@
-from infrastructure.config.client_hubspot import (
-    client
-)
 from hubspot.crm.contacts import (
     SimplePublicObjectInputForCreate,
     ApiException
+)
+from infrastructure.config.client_hubspot import (
+    client
 )
 
 
