@@ -6,7 +6,11 @@ from infrastructure.database.constants import (
     URL_CLICKUP,
 )
 from infrastructure.process.hubspot_process import HubSpotProcess
+from infrastructure.queries.database_query import ApiCallsQuery
+from infrastructure.config.helpers import GeneralHelpers
 
+
+repository = ApiCallsQuery()
 headers = {"Authorization": CLIENT_SECRET}
 
 
@@ -27,6 +31,13 @@ class ClickUpProcess:
         response = requests.get(
             self.url+"/list/"+LIST_ID_CLICKUP,
             headers=self.header)
+        data = {
+            "created_at": GeneralHelpers.get_datetime(),
+            "endpoint": "GET-/v1/list",
+            "params": "{}",
+            "result": str(dict(response.json())),
+        }
+        print(repository.create_query(data))
         return dict(response.json())
 
     def create_task(self) -> dict:
@@ -41,6 +52,13 @@ class ClickUpProcess:
                     print(contact.get("hs_object_id"))
                     result = self.__create_task(contact)
                     self.hubspot_client.update_contact(contact.get("hs_object_id"))
+        data = {
+            "created_at": GeneralHelpers.get_datetime(),
+            "endpoint": "POST-/v1/list",
+            "params": "{'message': 'La tarea ha finalizado'}",
+            "result": str(result),
+        }
+        print(repository.create_query(data))
         return {
             "message": "La tarea ha finalizado"
         }

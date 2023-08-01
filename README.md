@@ -6,12 +6,16 @@ Integración de Python y el framework FastAPI con PostgreSQL, HubSpot y ClickUp.
 ## Caratecristica
 1. API Endpoints: 
 ```sh
-/clickup    method: GET - POST
+/list    method: GET - POST
 ```
 ```sh
-/hubspot    method: GET - POST
+/task    method: POST
+```
+```sh
+/contact    method: GET - POST
 ```
 2. El sistema siempre guarda todas las peticiones realizadas a los endpoint GET y POST.
+3. El método POST del endponit /list es para hacer un debug, el POST del endponit /task es el que realiza el backgroup.
 
 ### Variables de entorno
 Se deben de crear las siguiente variables de entorno con sus respectivos datos:

@@ -33,7 +33,7 @@ async def create_hubspot(
         )
         return JSONResponse(
             status_code=OK,
-            content=response.properties
+            content=response
         )
     except Exception as e:
         return JSONResponse(

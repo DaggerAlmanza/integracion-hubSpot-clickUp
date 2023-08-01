@@ -8,6 +8,10 @@ from hubspot.crm.contacts import (
     SimplePublicObjectInputForCreate,
     SimplePublicObjectInput,
 )
+from infrastructure.queries.database_query import ApiCallsQuery
+from infrastructure.config.helpers import GeneralHelpers
+
+repository = ApiCallsQuery()
 
 
 class HubSpotProcess:
@@ -22,8 +26,22 @@ class HubSpotProcess:
                 archived=False,
                 after=after
             )
+            data = {
+                "created_at": GeneralHelpers.get_datetime(),
+                "endpoint": "GET-/v1/contact",
+                "params": "{}",
+                "result": str(response.results[-1].properties),
+            }
+            print(repository.create_query(data))
             return response
         except ApiException as e:
+            data = {
+                "created_at": GeneralHelpers.get_datetime(),
+                "endpoint": "GET-/v1/contact",
+                "params": "{}",
+                "result": str(e),
+            }
+            print(repository.create_query(data.dict()))
             return f"Exception when calling basic_api->get_page: %s\n  % {e}"
 
     def validate_contact(self, id):
@@ -43,8 +61,22 @@ class HubSpotProcess:
             response = self.client.crm.contacts.basic_api.create(
                 simple_public_object_input_for_create=simple_public_object_input_for_create
             )
-            return response
+            data = {
+                "created_at": GeneralHelpers.get_datetime(),
+                "endpoint": "POST-/v1/contact",
+                "params": properties,
+                "result": str(response.properties),
+            }
+            print(repository.create_query(data))
+            return response.properties
         except ApiException as e:
+            data = {
+                "created_at": GeneralHelpers.get_datetime(),
+                "endpoint": "POST-/v1/contact",
+                "params": properties,
+                "result": str(e),
+            }
+            print(repository.create_query(data.dict()))
             return f"Exception when calling basic_api->create: %s\n  % {e}"
 
     def update_contact(self, id):
